@@ -1,1 +1,1 @@
-# MineSweeperSolver
+# MinesweeperSolver
