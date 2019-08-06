@@ -23,7 +23,38 @@ for line in opened_file:
 	solved_board.append(line_list)
 
 def reveal(rowpos, colpos):
-	pass
+	revealed = solved_board[rowpos][colpos]
+	board[rowpos][colpos] = revealed
+	if revealed == 'B':
+		on = False
+		print('~~~Game Over~~~')
+
+	#Determines how many blank spaces need to be revealed
+	elif revealed == '&':
+		#Checks for more blank spaces to the right
+		for box in range(length):
+			col_position_holder = colpos+box+1 #to check the next box in positive direction (starts at 1 to not recount original box)
+			if col_position_holder > length:
+				break #If we reach the end of the board in the positive direction, stop
+			next_revealed = solved_board[rowpos][col_position_holder]
+			if next_revealed == '&':
+				board[rowpos][col_position_holder] = next_revealed
+			else:
+				break
+
+		#Checks for more blank spaces to the left
+		for box in range(length):
+			col_position_holder = colpos-box-1 #to check the next box in negative direction (starts at 1 to not recount original box)
+			if col_position_holder < 0:
+				break #If we reach the end of the board in the negative direction, stop
+			next_revealed = solved_board[rowpos][col_position_holder]
+			if next_revealed == '&':
+				board[rowpos][col_position_holder] = next_revealed
+			else:
+				break
+		
+		#TODO Checks for more blank spaces up
+		#TODO Checks for more blank spaces down
 def analyze():
 	pass
 
