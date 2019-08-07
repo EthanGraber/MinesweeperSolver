@@ -123,7 +123,31 @@ def blankcheck():
 	if again:
 		blankcheck()
 def analyze():
-	pass
+	for row in range(len(board)):
+		for col in range(len(board[row])):
+			value = board[row][col]
+
+			#Doesn't process blank space (&), unknowns (#), or flagged bombs (F)
+			if value == '&' or value == '#' or value == 'F':
+				continue
+
+			#Finds neighbors and counts how many unknown values are neighbors
+			neighbors = getneighbors(row, col)
+			unknown_counter = 0
+			unknowns = []
+			for key in neighbors:
+				if key[0] == '#':
+					unknown_counter += 1
+					unknown.append(key)
+			if int(value) == unknown_counter:
+				for key in unknowns:
+					rowval = neighbors[key][1] #[0] is value, [1] row, [2] col
+					colval = neighbors[key][2]
+					board[rowval][colval] = 'F' #Flags it as a bomb
+			elif int(value) < unknown_counter:
+				pass
+			else:
+				print("This shouldn't happen")
 
 def getneighbors(row, col):
 	#Declares variables with a value of 0
