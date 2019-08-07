@@ -102,22 +102,22 @@ def blankcheck():
 					#If the program can't find a blank to the left, reveals tile
 					elif board[row][col-1] == '#':
 						board[row][col-1] = solved_board[row][col-1]
-				#Checks row above for blank
+				#Checks row below for blank
 				if row+1 < width:
-					#If blank above, reveals it and tells loop to run again
+					#If blank below, reveals it and tells loop to run again
 					if solved_board[row+1][col]=='&' and board[row+1][col]=='#':
 						board[row+1][col] = solved_board[row+1][col]
 						again = True
-					#If the program can't find a blank above, reveals tile
+					#If the program can't find a blank below, reveals tile
 					elif board[row+1][col] == '#':
 						board[row+1][col] = solved_board[row+1][col]
-				#Checks row below for blank
+				#Checks row above for blank
 				if row-1 > -1:
-					#If blank below, reveals it and tells loop to run again
+					#If blank above, reveals it and tells loop to run again
 					if solved_board[row-1][col]=='&' and board[row-1][col]=='#':
 						board[row-1][col] = solved_board[row-1][col]
 						again = True
-					#If the program can't find a blank below, reveals tile
+					#If the program can't find a blank above, reveals tile
 					elif board[row-1][col] == '#':
 						board[row-1][col] = solved_board[row-1][col]
 	if again:
@@ -126,6 +126,38 @@ def analyze():
 	pass
 
 def getneighbors(row, col):
+	#Declares variables with a value of 0
+	up = 0
+	down = 0
+	left = 0
+	right = 0
+	upleft = 0
+	upright = 0
+	downleft = 0
+	downright = 0
+	#Checks if there's a row above the value
+	if row-1 > -1:
+		up = board[row-1][col]
+		#Checks if there's space to the left and right in the columns above
+		if col-1 > -1:
+			upleft = board[row-1][col-1]
+		if col+1 < length:
+			upright = board[row-1][col+1]
+	#Checks if there's a row below the value
+	if row+1 < width:
+		down = board[row+1][col]
+		#Checks if there's space to the left and right in the columns below
+		if col-1 > -1:
+			downleft = board[row+1][col-1]
+		if col+1 < length:
+			downright = board[row+1][col+1]
+	#Checks right
+	if col+1 < length:
+		right = board[row][col+1]
+	#Checks left
+	if col-1 > -1:
+		left = board[row][col-1]
+
 	neighbors = {
 		'upleft':upleft,
 		'up':up,
@@ -135,6 +167,7 @@ def getneighbors(row, col):
 		'downleft':downleft,
 		'down':down,
 		'downright':downright}
+	return neighbors
 
 def prettyprint(input_board):
 	separator = " | "
