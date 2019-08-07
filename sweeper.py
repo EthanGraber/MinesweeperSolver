@@ -125,6 +125,17 @@ def blankcheck():
 def analyze():
 	pass
 
+def getneighbors(row, col):
+	neighbors = {
+		'upleft':upleft,
+		'up':up,
+		'upright':upright,
+		'left':left,
+		'right':right,
+		'downleft':downleft,
+		'down':down,
+		'downright':downright}
+
 def prettyprint(input_board):
 	separator = " | "
 	lines = []
