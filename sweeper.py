@@ -2,14 +2,13 @@ length = int(input("Board length: "))
 width = int(input("Board width: "))
 
 #Create the board
-row = []
+
 board = []
-for x in range(length):
-	row.extend('#')
-
 for x in range(width):
+	row = []
+	for x in range(length):
+		row.extend('#') 
 	board.append(row)
-
 
 #Import the solution for reference
 solved_board = []
@@ -22,16 +21,22 @@ for line in opened_file:
 	line_list.extend(line)
 	solved_board.append(line_list)
 
+print(board)
+print(solved_board)
+
 def reveal(rowpos, colpos):
 	revealed = solved_board[rowpos][colpos]
-	board[rowpos][colpos] = revealed
+	print(revealed)
 	prettyprint(board)
+	print(board[rowpos][colpos])
+	board[rowpos][colpos] = revealed 
 	if revealed == 'B':
 		print('~~~Game Over~~~')
 
 	#Determines how many blank spaces need to be revealed
-	'''elif revealed == '&':
-		#Checks for more blank spaces to the right
+	#elif revealed == '&':
+		#blankcheck()
+		'''#Checks for more blank spaces to the right
 		for box in range(length):
 			col_position_holder = colpos+box+1 #to check the next box in positive direction (starts at 1 to not recount original box)
 			if col_position_holder > length:
@@ -80,17 +85,31 @@ def reveal(rowpos, colpos):
 				break'''
 
 def blankcheck():
+	again = False
 	for row in range(len(board)):
 		for col in range(len(board[row])):
+			#print("row: " + str(row))
+			#print("col : " + str(col))
+			#prettyprint(board)
 			if board[row][col] == '&':
 				if col+1 < length:
 					if solved_board[row][col+1]=='&' and board[row][col+1]=='#':
 						board[row][col+1] = solved_board[row][col+1]
-				#TODO col-1
+						again = True
+				if col-1 > -1:
+					if solved_board[row][col-1]=='&' and board[row][col-1]=='#':
+						board[row][col-1] = solved_board[row][col-1]
+						again = True
 				if row+1 < width:
 					if solved_board[row+1][col]=='&' and board[row+1][col]=='#':
 						board[row+1][col] = solved_board[row+1][col]
-				#TODO row-1
+						again = True
+				if row-1 > -1:
+					if solved_board[row-1][col]=='&' and board[row-1][col]=='#':
+						board[row-1][col] = solved_board[row-1][col]
+						again = True
+	if again:
+		blankcheck()
 def analyze():
 	pass
 
@@ -114,7 +133,7 @@ def play():
 	bombs = 21 #THIS IS THE VALUE FOR THE CURRENT MAP.TXT, ONLY HARDCODED FOR TESTING
 	while on and move_counter < 300:
 		if move_counter == 0:
-			reveal(0, 0)
+			reveal(0, 3)
 			prettyprint(board)
 			on = False
 		move_counter += 1
