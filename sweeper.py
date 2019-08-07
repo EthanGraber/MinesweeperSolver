@@ -127,37 +127,52 @@ def analyze():
 
 def getneighbors(row, col):
 	#Declares variables with a value of 0
-	up = 0
-	down = 0
-	left = 0
-	right = 0
-	upleft = 0
-	upright = 0
-	downleft = 0
-	downright = 0
+	up = []
+	down = []
+	left = []
+	right = []
+	upleft = []
+	upright = []
+	downleft = []
+	downright = []
 	#Checks if there's a row above the value
 	if row-1 > -1:
-		up = board[row-1][col]
+		up[0] = board[row-1][col]
+		up[1] = row-1
+		up[2] = col
 		#Checks if there's space to the left and right in the columns above
 		if col-1 > -1:
-			upleft = board[row-1][col-1]
+			upleft[0] = board[row-1][col-1]
+			upleft[1] = row-1
+			upleft[2] = col-1
 		if col+1 < length:
-			upright = board[row-1][col+1]
+			upright[0] = board[row-1][col+1]
+			upright[1] = row-1
+			upright[2] = col+1
 	#Checks if there's a row below the value
 	if row+1 < width:
-		down = board[row+1][col]
+		down[0] = board[row+1][col]
+		down[1] = row+1
+		down[2] = col
 		#Checks if there's space to the left and right in the columns below
 		if col-1 > -1:
-			downleft = board[row+1][col-1]
+			downleft[0] = board[row+1][col-1]
+			downleft[1] = row+1
+			downleft[2] = col-1
 		if col+1 < length:
-			downright = board[row+1][col+1]
+			downright[0] = board[row+1][col+1]
+			downright[1] = row+1
+			downright[2] = col+1
 	#Checks right
 	if col+1 < length:
-		right = board[row][col+1]
+		right[0] = board[row][col+1]
+		right[1] = row
+		right[2] = col+1
 	#Checks left
 	if col-1 > -1:
-		left = board[row][col-1]
-
+		left[0] = board[row][col-1]
+		left[1] = row
+		left[2] = col-1
 	neighbors = {
 		'upleft':upleft,
 		'up':up,
