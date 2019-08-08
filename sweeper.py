@@ -1,14 +1,22 @@
 length = int(input("Board length: "))
 width = int(input("Board width: "))
 
-#Create the board
 
+#Create the board
 board = []
-for x in range(width):
+for i in range(width):
 	row = []
-	for x in range(length):
+	for i in range(length):
 		row.extend('#') 
 	board.append(row)
+
+#Create the probabilty measurements storage
+probability = []
+for i in range(width):
+	row = []
+	for i in range(length):
+		row.append({'probability:'0, 'terms':0})
+	probability.append(row)
 
 #Import the solution for reference
 solved_board = []
@@ -131,15 +139,18 @@ def analyze():
 			if value == '&' or value == '#' or value == 'F':
 				continue
 
-			#Finds neighbors and counts how many unknown values are neighbors
+			#Finds neighbors and counts how many unknown values and bombs are neighbors
 			neighbors = getneighbors(row, col)
+			bomb_counter = 0
 			unknown_counter = 0
 			unknowns = []
 			for key in neighbors:
 				if key[0] == '#':
 					unknown_counter += 1
 					unknown.append(key)
-			if int(value) == unknown_counter:
+				elif key[0] == 'F':
+					bomb_counter += 1 #TODO if bomb_counter == value, rm unknowns
+			if (int(value)-bomb_counter) == unknown_counter and unknown_counter > 0:
 				for key in unknowns:
 					rowval = neighbors[key][1] #[0] is value, [1] row, [2] col
 					colval = neighbors[key][2]
@@ -218,6 +229,9 @@ def prettyprint(input_board):
 		lines.append(line)
 	for line in lines:
 		print(line)
+
+def probbomb():
+	pass
 
 
 def play():
