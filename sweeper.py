@@ -15,7 +15,7 @@ probability = []
 for i in range(width):
 	row = []
 	for i in range(length):
-		row.append({'probability:'0, 'terms':0})
+		row.append({'probability':0, 'terms':[]}) #TODO http://nothings.org/games/minesweeper/
 	probability.append(row)
 
 #Import the solution for reference
@@ -131,6 +131,7 @@ def blankcheck():
 	if again:
 		blankcheck()
 def analyze():
+	again = False
 	for row in range(len(board)):
 		for col in range(len(board[row])):
 			value = board[row][col]
@@ -145,20 +146,36 @@ def analyze():
 			unknown_counter = 0
 			unknowns = []
 			for key in neighbors:
-				if key[0] == '#':
-					unknown_counter += 1
-					unknown.append(key)
-				elif key[0] == 'F':
-					bomb_counter += 1 #TODO if bomb_counter == value, rm unknowns
+				try:
+					if neighbors[key][0] == '#':
+						unknown_counter += 1
+						unknowns.append(key)
+					elif neighbors[key][0] == 'F':
+						bomb_counter += 1 
+				except(IndexError):
+					pass
+			#If there are exactly as many unknowns as bombs left, flags as bomb
 			if (int(value)-bomb_counter) == unknown_counter and unknown_counter > 0:
 				for key in unknowns:
 					rowval = neighbors[key][1] #[0] is value, [1] row, [2] col
 					colval = neighbors[key][2]
 					board[rowval][colval] = 'F' #Flags it as a bomb
-			elif int(value) < unknown_counter:
+				again = True
+			#If all bombs are accounted for, reveals unknowns
+			elif int(value) == bomb_counter and unknown_counter > 0:
+				for key in unknowns:
+					rowval = neighbors[key][1]
+					colval = neighbors[key][2]
+					reveal(rowval, colval)
+				again = True
+			elif (int(value)-bomb_counter) < unknown_counter:
+				pass
+			elif unknown_counter == 0:
 				pass
 			else:
-				print("This shouldn't happen")
+				print("This shouldn't happen") 
+	if again:
+		analyze()
 
 def getneighbors(row, col):
 	#Declares variables with a value of 0
@@ -172,42 +189,42 @@ def getneighbors(row, col):
 	downright = []
 	#Checks if there's a row above the value
 	if row-1 > -1:
-		up[0] = board[row-1][col]
-		up[1] = row-1
-		up[2] = col
+		up.append(board[row-1][col])
+		up.append(row-1)
+		up.append(col)
 		#Checks if there's space to the left and right in the columns above
 		if col-1 > -1:
-			upleft[0] = board[row-1][col-1]
-			upleft[1] = row-1
-			upleft[2] = col-1
+			upleft.append(board[row-1][col-1])
+			upleft.append(row-1)
+			upleft.append(col-1)
 		if col+1 < length:
-			upright[0] = board[row-1][col+1]
-			upright[1] = row-1
-			upright[2] = col+1
+			upright.append(board[row-1][col+1])
+			upright.append(row-1)
+			upright.append(col+1)
 	#Checks if there's a row below the value
 	if row+1 < width:
-		down[0] = board[row+1][col]
-		down[1] = row+1
-		down[2] = col
+		down.append(board[row+1][col])
+		down.append(row+1)
+		down.append(col)
 		#Checks if there's space to the left and right in the columns below
 		if col-1 > -1:
-			downleft[0] = board[row+1][col-1]
-			downleft[1] = row+1
-			downleft[2] = col-1
+			downleft.append(board[row+1][col-1])
+			downleft.append(row+1)
+			downleft.append(col-1)
 		if col+1 < length:
-			downright[0] = board[row+1][col+1]
-			downright[1] = row+1
-			downright[2] = col+1
+			downright.append(board[row+1][col+1])
+			downright.append(row+1)
+			downright.append(col+1)
 	#Checks right
 	if col+1 < length:
-		right[0] = board[row][col+1]
-		right[1] = row
-		right[2] = col+1
+		right.append(board[row][col+1])
+		right.append(row)
+		right.append(col+1)
 	#Checks left
 	if col-1 > -1:
-		left[0] = board[row][col-1]
-		left[1] = row
-		left[2] = col-1
+		left.append(board[row][col-1])
+		left.append(row)
+		left.append(col-1)
 	neighbors = {
 		'upleft':upleft,
 		'up':up,
@@ -230,21 +247,39 @@ def prettyprint(input_board):
 	for line in lines:
 		print(line)
 
-def probbomb():
-	pass
-
+def probbomb(value, neighbors, unknowns, bombs): #TODO create 'advanced' bomb finding 
+	unknown_neighbors = []
+	for unknown in unknowns:
+		#Gets the neighbors for the unknowns
+		unknown_neighbors.append(getneighbors(unknown[1], unknown[2])) #[1] is row, [2] is col
+	
 
 def play():
 	on = True
 	move_counter = 0
 	total_boxes = length*width
 	#TODO bombs read from file
-	bombs = 21 #THIS IS THE VALUE FOR THE CURRENT MAP.TXT, ONLY HARDCODED FOR TESTING
+	bombs = 23 #THIS IS THE VALUE FOR THE CURRENT MAP.TXT, ONLY HARDCODED FOR TESTING
 	while on and move_counter < 300:
 		if move_counter == 0:
 			reveal(0, 0)
 			prettyprint(board)
+			analyze()
+		r = int(input("Reveal row: "))
+		c = int(input("Reveal col: "))
+		reveal(r, c)
+		analyze()
+		prettyprint(board)
+		
+		f_counter = 0
+		for row in range(len(board)):
+			for col in range(len(board[row])):
+				if board[row][col] == 'F':
+					f_counter += 1
+		if f_counter == bombs:
+			print('win!')
 			on = False
+
 		move_counter += 1
 
 prettyprint(board)
