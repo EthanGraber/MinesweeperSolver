@@ -9,9 +9,15 @@ for line in opened_file:
 	line_list.extend(line)
 	solved_board.append(line_list)
 
-#Read length and height from the solution #TODO also read bombs from solution (for B in solved_board)?
+#Read length and height from the solution
 length = len(line)
 height = len(solved_board)
+
+bombs = 0
+for row in range(len(solved_board)):
+	for col in range(len(solved_board[row])):
+		if solved_board[row][col] == 'B':
+			bombs += 1
 
 #Create the board
 board = []
@@ -216,8 +222,6 @@ def play():
 	on = True
 	move_counter = 0
 	total_boxes = length*height
-	#TODO bombs read from file
-	bombs = 23 #THIS IS THE VALUE FOR THE CURRENT MAP.TXT, ONLY HARDCODED FOR TESTING
 	while on and move_counter < 300:
 		if move_counter == 0:
 			reveal(0, 0)
