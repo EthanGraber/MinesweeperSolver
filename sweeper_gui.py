@@ -89,3 +89,4 @@ while on:
 			for entity in all_sprites:
 				entity.boxreveal(sweeper.board[entity.row][entity.col])
 			render()
+			sweeper.wincheck()

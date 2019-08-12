@@ -246,4 +246,11 @@ def play():
 
 		move_counter += 1
 
-
+def wincheck():
+	f_counter = 0
+	for row in range(len(board)):
+		for col in range(len(board[row])):
+			if board[row][col] == 'F':
+				f_counter += 1
+	if f_counter == bombs:
+		print('win!')
