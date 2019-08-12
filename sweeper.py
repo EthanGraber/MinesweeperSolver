@@ -50,6 +50,8 @@ def reveal(rowpos, colpos):
 	elif revealed == '&':
 		blankcheck()
 
+	analyze()	
+
 def blankcheck():
 	again = False
 	#For loops iterate through each row and each column within each row
