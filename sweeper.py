@@ -1,14 +1,13 @@
-length = int(input("Board length: "))
-width = int(input("Board width: "))
-
-
 #Create the board
+def createboard(length, width):
+	board = []
+	for i in range(width):
+		row = []
+		for i in range(length):
+			row.extend('#') 
+		board.append(row)
+	return board
 board = []
-for i in range(width):
-	row = []
-	for i in range(length):
-		row.extend('#') 
-	board.append(row)
 
 #Create the probabilty measurements storage
 probability = []
