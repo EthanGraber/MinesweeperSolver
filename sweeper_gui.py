@@ -1,4 +1,4 @@
-#import sweeper #TODO make sweeper importable
+import sweeper #TODO make sweeper importable
 import pygame
 from pygame.locals import *
 pygame.init()
@@ -13,9 +13,11 @@ class Box(pygame.sprite.Sprite):
 
 all_sprites = pygame.sprite.Group()
 
-#Determines size of board
-l = int(input("length: "))
-h = int(input("heigh: "))
+#Gets length and height from sweeper
+l = sweeper.length
+h = sweeper.height
+
+sweeper.prettyprint(sweeper.solved_board)
 
 #Creates screen based on size and makes it white
 screen = pygame.display.set_mode((l*75,h*75))
