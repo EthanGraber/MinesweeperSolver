@@ -6,10 +6,11 @@ pygame.init()
 class Box(pygame.sprite.Sprite):
 	def __init__(self):
 		super(Box, self).__init__() #allows Box to inherit from pygame Sprite
-		self.image = pygame.image.load('box.png').convert()
+		self.image = pygame.image.load('box.png').convert() #TODO use smaller box.png?
 		self.image.set_colorkey((255,255,255), RLEACCEL) #removes white background from sprite
+		self.rect = self.image.get_rect()
 	def setrect(self, x, y):
-		self.rect = (x, y)
+		self.rect.move_ip(x, y)
 
 all_sprites = pygame.sprite.Group()
 
@@ -34,11 +35,13 @@ for i in range(h):
 		x_pos += 75
 	y_pos += 75
 
+
 for entity in all_sprites:
 	screen.blit(entity.image, entity.rect)
 pygame.display.flip()
 
 on = True
+move_counter = 0
 while on:
 	for event in pygame.event.get():
 		if event.type == KEYDOWN:
@@ -46,3 +49,7 @@ while on:
 				on = False
 		elif event.type == QUIT:
 			on = False
+		elif event.type == pygame.MOUSEBUTTONUP:
+			pos = pygame.mouse.get_pos()
+			clicked_sprites = [s for s in all_sprites if s.rect.collidepoint(pos)]
+			

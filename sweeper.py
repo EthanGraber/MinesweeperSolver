@@ -9,14 +9,14 @@ for line in opened_file:
 	line_list.extend(line)
 	solved_board.append(line_list)
 
-#Read length and height from the solution
+#Read length, height, and bombs from the solution
 length = len(line)
 height = len(solved_board)
 
 bombs = 0
 for row in range(len(solved_board)):
 	for col in range(len(solved_board[row])):
-		if solved_board[row][col] == 'B':
+		if solved_board[row][col] == 'B': #checks if each value of solved_board is a bomb
 			bombs += 1
 
 #Create the board
