@@ -49,8 +49,10 @@ def reveal(rowpos, colpos):
 	#Determines how many blank spaces need to be revealed
 	elif revealed == '&':
 		blankcheck()
+		analyze()
 
-	analyze()	
+	else:
+		analyze()	
 
 def blankcheck():
 	again = False
@@ -103,7 +105,7 @@ def analyze():
 			value = board[row][col]
 
 			#Doesn't process blank space (&), unknowns (#), or flagged bombs (F)
-			if value == '&' or value == '#' or value == 'F':
+			if value == '&' or value == '#' or value == 'F' or value == 'B':
 				continue
 
 			#Finds neighbors and counts how many unknown values and bombs are neighbors
@@ -254,3 +256,6 @@ def wincheck():
 				f_counter += 1
 	if f_counter == bombs:
 		print('win!')
+		return True
+	else:
+		return False

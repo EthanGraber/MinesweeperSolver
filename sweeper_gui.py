@@ -69,6 +69,7 @@ render()
 
 on = True
 move_counter = 0
+game_over = False
 while on:
 	for event in pygame.event.get():
 		if event.type == KEYDOWN:
@@ -81,12 +82,19 @@ while on:
 			clicked_sprites = [s for s in all_sprites if s.rect.collidepoint(pos)]
 
 			#rect[1] is the y coordinate of the image. Divided by 83 bc 83 pixels.
-			
+		
 			col = int(clicked_sprites[0].rect[0]/83)
 			row = int(clicked_sprites[0].rect[1]/85)
 			
-			sweeper.reveal(row, col)
-			for entity in all_sprites:
-				entity.boxreveal(sweeper.board[entity.row][entity.col])
+			if not game_over:
+				sweeper.reveal(row, col)
+				for entity in all_sprites:
+					entity.boxreveal(sweeper.board[entity.row][entity.col])
+				win = sweeper.wincheck()
+				if win:
+					game_over = True
+			else:
+				for entity in all_sprites:
+					entity.boxreveal('#')
 			render()
-			sweeper.wincheck()
+			
